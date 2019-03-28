@@ -1,4 +1,3 @@
-
 class BufferHeaderNode:
     def __init__(self, id):
         self.id = id
@@ -13,7 +12,7 @@ class BufferHeaderNode:
         self.data = None # data contents held in the buffer
         self.locked = False # buffer is locked/busy
         self.delayWrite = False #kernel must write contents to disk before reassigning.
-        # self.validData = True #data in buffer is valid
+        self.validData = True #data in buffer is valid
         # self.processing = False #Kernel is reading/writing context to disk
 
     def isLocked(self):
@@ -21,6 +20,9 @@ class BufferHeaderNode:
     
     def isDelayedWrite(self):
         return self.delayWrite
+
+    def isDataValid(self):
+        return self.validData
 
     def updateBlockNumber(self, blockNumber):
         self.blockNumber = blockNumber
