@@ -1,4 +1,5 @@
 from threading import Event
+
 class EventBus:
     EVENT_WAIT_ANY_BUFFER = "wait:buffer"
     EVENT_WAIT_SPECIFIC_BUFFER = lambda buf: f"wait:buffer.{buf}"
@@ -24,6 +25,11 @@ class EventBus:
         event = Event()
         event.clear()
         self.events[eventName] = event
-    
+
+    def isSet(self, eventName):
+        if eventName in self.events:
+            return self.events[eventName].isSet()
+        return False
+
     def __repr__(self):
         return str(self.events)

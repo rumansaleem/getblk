@@ -3,14 +3,14 @@ from process import Process
 
 from dummy_kernel import DummyKernel
 
-kernel = DummyKernel(BufferCache(10))
+kernel = DummyKernel(10, 25)
 
 kernel.addProcesses([
-    Process(kernel, 1, 10, 1), 
-    Process(kernel, 2, 20, 1),
-    Process(kernel, 3, 10, 1),
-    Process(kernel, 4, 20, 1),
-    Process(kernel, 5, 10, 1),
+    Process(kernel, 4, 20, Process.IO_READ),
+    Process(kernel, 1, 10, Process.IO_READ), 
+    Process(kernel, 5, 10, Process.IO_READ),
+    Process(kernel, 2, 20, Process.IO_WRITE),
+    Process(kernel, 3, 10, Process.IO_WRITE),
 ])
 
 kernel.boot()

@@ -34,9 +34,13 @@ class BufferHeaderNode:
     def unlock(self):
         if self.isLocked():
             self.locked = False
+
+    def modifyData(self, data):
+        self.data = data
+        self.delayWrite = True
     
     def __repr__(self):
-        return "|Block:" + str(self.blockNumber) + "|"
+        return f'[Block:{self.blockNumber}|Data:"{self.data}"|Lock:{self.isLocked()}|DelayWrite:{self.isDelayedWrite()}]'
 
 class LinkedList:
     def __init__(self):
@@ -90,7 +94,7 @@ class LinkedList:
         return  False if len(self.__items__) > 0 else True
 
     def __repr__(self):
-        return " -> ".join([ str(item) for item in self.__items__])
+        return "\n     ".join([ str(item) for item in self.__items__])
         
 class HashQueue:
     def __init__(self):
@@ -141,3 +145,6 @@ class BufferCache:
         self.hashQueue = HashQueue()
         for key in self.__buffers__:
             self.freeList.push(self.__buffers__[key])
+    
+    def __repr__(self):
+        return f'All Buffers:\n{self.__buffers__}\n\nFree List:\n{self.freeList}\n\nHash Queue:\n{self.hashQueue}\n'

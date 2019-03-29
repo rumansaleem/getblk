@@ -1,21 +1,27 @@
 from threading import Thread
 import time
-
 class Process (Thread):
-
-    def __init__(self, kernel, pid, blockNumber, ttl = 10):
+    IO_READ = "read"
+    IO_WRITE = "write"
+    def __init__(self, kernel, pid, blockNumber, io = None, ttl = 1):
         super(Process, self).__init__()
-        self.pid = pid
         self.kernel = kernel
         self.buffer = None
-        self.ttl = ttl
+        self.pid = pid
         self.blockNumber = blockNumber
+        self.io = Process.IO_READ if io == None else io
+        self.ttl = ttl
 
     def run(self):
-        self.buffer = self.kernel.getblk(self.blockNumber, self.pid)
-        while(self.ttl > 0):
-            print(f'PID [{self.pid}]: Working with {self.buffer}')
+        print(f'PID[{self.pid}]: Started')
+        self.buffer = self.kernel.bread(self.blockNumber, self.pid)
+        while self.ttl > 0:
+            print(f'PID [{self.pid}]: Read {self.buffer}')
             time.sleep(1)
             self.ttl -= 1
-        self.buffer.data = f'Data written by: PID[{self.pid}]'
-        self.kernel.bwrite(self.buffer, self.pid)
+        if self.io == Process.IO_WRITE:
+            self.buffer.modifyData(f'Data written by: PID[{self.pid}]')
+        self.kernel.brelse(self.buffer, self.pid)
+
+    def __repr__(self):
+        return f'[PID:{self.pid}, Block:{self.blockNumber}, Buffer:{self.buffer}, IO:{self.io}, TTL:{self.ttl}]'

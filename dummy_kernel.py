@@ -1,18 +1,20 @@
 from buffer_structures import BufferCache
 from threading import Event, Thread
-from wait_control import WaitControl
-
+from event_bus import EventBus
+from disk import Disk
+import time
 
 class Worker(Thread):
     def __init__(self, processes = []):
         super(Worker, self).__init__()
         self.queued = processes
         self.started = []
-        self.waitControl = WaitControl()
+        self.completed = []
+        self.eventBus = EventBus()
 
     def add(self, process):
         self.queued.append(process)
-        # self.waitControl.wake("process:new")
+        # self.eventBus.wake("process:new")
     
     def run(self):
         while len(self.queued) > 0:
@@ -20,13 +22,23 @@ class Worker(Thread):
             process.start()
             self.started.append(process)
         
-        [t.join() for t in self.started]
+        for process in self.started:
+            process.join()
+            self.onCompleted(process)
+
+    def onCompleted(self, process):
+        self.started.remove(process)
+        self.completed.append(process)
+        # print(f"After Removal: {self.started}")
+        print(f'PID[{process.pid}]: Exiting with success')
 
 class DummyKernel:
-    def __init__(self, bufferCache = BufferCache(20)):
-        self.bufferCache = bufferCache
-        self.waitControl = WaitControl()
+    def __init__(self, bufferSize = 20, diskSize = 100):
+        self.bufferCache = BufferCache(bufferSize)
+        self.eventBus = EventBus()
         self.worker = Worker()
+        self.disk = Disk(diskSize, self.eventBus)
+        self.isRunning = False
 
     def addProcess(self, process):
         self.worker.add(process)
@@ -34,10 +46,34 @@ class DummyKernel:
     def addProcesses(self, processList):
         [self.worker.add(process) for process in processList]
 
+    def snapshot(self):
+        while self.isRunning:
+            time.sleep(1)
+            print(
+                "\n\n==========================\n", 
+                "BufferCache Status:", 
+                "\n", self.bufferCache, 
+                "\n\n", "Disk:", 
+                "\n", self.disk,
+                "\n\n", "Event Bus:", "\n",
+                "\n".join([f"[{event}]: {self.eventBus.isSet(event)}" for event in self.eventBus.events]),
+                "\n\n", "Queued Processes:", "\n",
+                "\n".join([str(p) for p in self.worker.queued]),
+                "\n\n", "Active Processes:", "\n",
+                "\n".join([str(p) for p in self.worker.started]),
+                "\n\n", "Completed Processes:", "\n",
+                "\n".join([str(p) for p in self.worker.completed]),
+                "\n==========================\n\n"
+            )
+
     def boot(self):
+        self.isRunning = True
+        snapshotter = Thread(None, self.snapshot, None)
+        snapshotter.start()
         self.worker.start()
         self.worker.join()
-        print("\n\n", "End of Op", "\n", self.bufferCache, "\n\n")
+        self.isRunning = False
+        print("\n\n", "==============End of all Operations===============", "\n\n")
         
     def getblk(self, blockNumber, pid = "unknown"):
         """
@@ -50,9 +86,9 @@ class DummyKernel:
                     print(f'PID[{pid}] - getblk: accessing |Block:{blockNumber}|, resulted in "Scenario 5"')
                     # print("Scenario 5: Block was found on the hash queue, but its buffer is currently busy.")
                     # sleep until this buffer becomes free
-                    self.waitControl.sleep(WaitControl.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
-                    self.waitControl.clear(WaitControl.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
-                    continue # return 3 , buffer #block on hashQ but busy
+                    self.eventBus.sleep(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
+                    self.eventBus.clear(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
+                    continue
                 
                 # Scenario 1
                 buffer.lock()
@@ -66,16 +102,17 @@ class DummyKernel:
                     print(f'PID[{pid}] - getblk: accessing |Block:{blockNumber}|, resulted in "Scenario 4"')
                     # print('Scenario 4: Block could not be found on the hash queue and the free list of buffers is empty.')
                     # Sleep until any buffer becomes free
-                    self.waitControl.sleep(WaitControl.EVENT_WAIT_ANY_BUFFER)  
-                    self.waitControl.clear(WaitControl.EVENT_WAIT_ANY_BUFFER)
-                    continue # return 0 , None
+                    self.eventBus.sleep(EventBus.EVENT_WAIT_ANY_BUFFER)  
+                    self.eventBus.clear(EventBus.EVENT_WAIT_ANY_BUFFER)
+                    continue
                 else:
                     buffer = self.bufferCache.freeList.pop()
                     # Scenario 3
                     if buffer.isDelayedWrite():  
                         print(f'PID[{pid}] - getblk: accessing |Block:{blockNumber}|, resulted in "Scenario 3"')
-                        # print('Scenario 3: Buffer not found on hash queue, buffer obtained from free list is marked "delay write"')
-                        # Todo: write buffer asynchronously to the disk
+                        # write buffer asynchronously to the disk
+                        asyncWriteThread = Thread(None, self.bwrite, "bwrite", (buffer, pid))
+                        asyncWriteThread.start()
                         continue
                     
                     print(f'PID[{pid}] - getblk: accessing |Block:{blockNumber}|, resulted in "Scenario 2"')
@@ -86,12 +123,13 @@ class DummyKernel:
                     buffer.updateBlockNumber(blockNumber)
                     self.bufferCache.hashQueue.add(buffer)
                     return buffer # block not in hashQ, taken from freelist
+            time.sleep(.5)
 
     def brelse(self, buffer, pid="unknown"):
         # Todo: wakeup all processes (event: waiting for any buffer to become free;
-        self.waitControl.wake(WaitControl.EVENT_WAIT_ANY_BUFFER)
+        self.eventBus.wake(EventBus.EVENT_WAIT_ANY_BUFFER)
         # Todo: wakeup all processes (event: waiting for this buffer to become free;
-        self.waitControl.wake(WaitControl.EVENT_WAIT_SPECIFIC_BUFFER(buffer.blockNumber))
+        self.eventBus.wake(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(buffer.blockNumber))
 
         # raise processor execution level to block interrupts;
         if not buffer.isDelayedWrite():
@@ -102,6 +140,7 @@ class DummyKernel:
             # enqueue buffer at beginning of free list;
             self.bufferCache.freeList.unshift(buffer)
         # lower processor execution level to allow interrupts;
+        
         buffer.unlock()
         return buffer
 
@@ -111,18 +150,19 @@ class DummyKernel:
         buffer  = self.getblk(blockNumber, pid)
         if buffer.isDataValid():
             return buffer
-        # self.buffer.data = self.disk.read(self.budd)
         # initiate disk read
-        # sleep (event: disk read complete);
+        buffer.data = self.disk.read(buffer.blockNumber)
+
         return buffer
 
     def bwrite(self, buffer, pid="unknown"):
+        print(f"PID[{pid}]: asynchronously writing buffer {buffer} to disk")
         # initiate disk write;
-        # self.disk.write(buffer.blockNumber, buffer.data)
-        print(f"PID[{pid}]: writing buffer {buffer} to disk")
+        self.disk.writeBuffer(buffer)
 
-        if (True): # I/O synchronous
+        if not self.eventBus.isSet(Disk.EVENT_IO_COMPLETE): # I/O synchronous
             # sleep (event: I/O complete);
+            self.eventBus.sleep(Disk.EVENT_IO_COMPLETE)
             self.brelse(buffer, pid)
         elif buffer.isDelayedWrite():
             buffer.delayWrite = False
