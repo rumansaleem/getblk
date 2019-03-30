@@ -1,4 +1,4 @@
-from buffer_structures import BufferCache
+from buffer_structures.buffer_cache import BufferCache
 from threading import Event, Thread
 from event_bus import EventBus
 from disk import Disk
@@ -6,7 +6,7 @@ import time
 
 class Worker(Thread):
     def __init__(self, processes = []):
-        super(Worker, self).__init__()
+        super(Worker, self).__init__(daemon=True)
         self.queued = processes
         self.started = []
         self.completed = []
@@ -29,7 +29,6 @@ class Worker(Thread):
     def onCompleted(self, process):
         self.started.remove(process)
         self.completed.append(process)
-        # print(f"After Removal: {self.started}")
         print(f'PID[{process.pid}]: Exiting with success')
 
 class DummyKernel:
@@ -72,8 +71,17 @@ class DummyKernel:
         snapshotter.start()
         self.worker.start()
         self.worker.join()
+
+        print("Shutting down Kernel...\nSaving 'delay-write' buffers to disk...\n")
+        
+        for buffer in self.bufferCache.__buffers__:
+            print(f'Kernel: Examining the buffer {buffer} for "delayed-write"')
+            if buffer.isDelayedWrite():
+                self.disk.writeBuffer(buffer)
+
         self.isRunning = False
-        print("\n\n", "==============End of all Operations===============", "\n\n")
+        snapshotter.join()
+        print("\n\n", "==============Kernel Shutdown===============", "\n\n")
         
     def getblk(self, blockNumber, pid = "unknown"):
         """

@@ -1,40 +1,58 @@
-PID[3]: Started
-PID[3]: reading [block number 10] into buffer from disk
-PID[3] - getblk: accessing |Block:10|, resulted in "Scenario 2"
-PID [3]: Read [Block:10|Data:"None"|Lock:True|DelayWrite:False]
-PID[2]: Started
-PID[2]: reading [block number 20] into buffer from disk
-PID[2] - getblk: accessing |Block:20|, resulted in "Scenario 2"
-PID [2]: Read [Block:20|Data:"None"|Lock:True|DelayWrite:False]
-PID[5]: Started
-PID[5]: reading [block number 10] into buffer from disk
-PID[5] - getblk: accessing |Block:10|, resulted in "Scenario 5"
-PID[1]: Started
-PID[1]: reading [block number 10] into buffer from disk
-PID[1] - getblk: accessing |Block:10|, resulted in "Scenario 5"
-PID[4]: Started
-PID[4]: reading [block number 20] into buffer from disk
-PID[4] - getblk: accessing |Block:20|, resulted in "Scenario 5"
+PID[107]: Started
+PID[107]: reading [block number 4] into buffer from disk
+PID[107] - getblk: accessing |Block:4|, resulted in "Scenario 2"
+PID [107]: Read [Block:4|Data:"None"|Lock:True|DelayWrite:False]
+PID[106]: Started
+PID[106]: reading [block number 3] into buffer from disk
+PID[106] - getblk: accessing |Block:3|, resulted in "Scenario 2"
+PID [106]: Read [Block:3|Data:"None"|Lock:True|DelayWrite:False]
+PID[105]: Started
+PID[105]: reading [block number 5] into buffer from disk
+PID[105] - getblk: accessing |Block:5|, resulted in "Scenario 2"
+PID [105]: Read [Block:5|Data:"None"|Lock:True|DelayWrite:False]
+PID[104]: Started
+PID[104]: reading [block number 4] into buffer from disk
+PID[104] - getblk: accessing |Block:4|, resulted in "Scenario 5"
+PID[110]: Started
+PID[110]: reading [block number 4] into buffer from disk
+PID[110] - getblk: accessing |Block:4|, resulted in "Scenario 5"
+PID[109]: Started
+PID[109]: reading [block number 8] into buffer from disk
+PID[109] - getblk: accessing |Block:8|, resulted in "Scenario 2"
+PID [109]: Read [Block:8|Data:"None"|Lock:True|DelayWrite:False]
+PID[103]: Started
+PID[103]: reading [block number 3] into buffer from disk
+PID[103] - getblk: accessing |Block:3|, resulted in "Scenario 5"
+PID[102]: Started
+PID[102]: reading [block number 2] into buffer from disk
+PID[102] - getblk: accessing |Block:2|, resulted in "Scenario 2"
+PID [102]: Read [Block:2|Data:"None"|Lock:True|DelayWrite:False]
+PID[101]: Started
+PID[101]: reading [block number 1] into buffer from disk
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 4"
+PID[108]: Started
+PID[108]: reading [block number 1] into buffer from disk
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 4"
 
 
 ==========================
  BufferCache Status: 
  All Buffers:
-{1: [Block:10|Data:"None"|Lock:True|DelayWrite:False], 2: [Block:20|Data:"None"|Lock:True|DelayWrite:False], 3: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 4: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 5: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 6: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 7: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 8: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 9: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 10: [Block:None|Data:"None"|Lock:False|DelayWrite:False]}
+[Block:4|Data:"None"|Lock:True|DelayWrite:False]
+[Block:3|Data:"None"|Lock:True|DelayWrite:False]
+[Block:5|Data:"None"|Lock:True|DelayWrite:False]
+[Block:8|Data:"None"|Lock:True|DelayWrite:False]
+[Block:2|Data:"None"|Lock:True|DelayWrite:False]
 
 Free List:
-[Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
+
 
 Hash Queue:
-[2] : [Block:10|Data:"None"|Lock:True|DelayWrite:False]
-[0] : [Block:20|Data:"None"|Lock:True|DelayWrite:False]
+[0] : [Block:4|Data:"None"|Lock:True|DelayWrite:False]
+ [Block:8|Data:"None"|Lock:True|DelayWrite:False]
+ [3] : [Block:3|Data:"None"|Lock:True|DelayWrite:False]
+ [1] : [Block:5|Data:"None"|Lock:True|DelayWrite:False]
+ [2] : [Block:2|Data:"None"|Lock:True|DelayWrite:False]
  
 
  Disk: 
@@ -47,266 +65,343 @@ Hash Queue:
 [7:"None"]
 [8:"None"]
 [9:"None"]
-[10:"None"]
-[11:"None"]
-[12:"None"]
-[13:"None"]
-[14:"None"]
-[15:"None"]
-[16:"None"]
-[17:"None"]
-[18:"None"]
-[19:"None"]
-[20:"None"]
-[21:"None"]
-[22:"None"]
-[23:"None"]
-[24:"None"]
-[25:"None"] 
+[10:"None"] 
 
  Event Bus: 
- [wait:buffer.10]: False
-[wait:buffer.20]: False 
+ [wait:buffer.4]: False
+[wait:buffer.3]: False
+[wait:buffer]: False 
 
  Queued Processes: 
   
 
  Active Processes: 
- [PID:3, Block:10, Buffer:[Block:10|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
-[PID:2, Block:20, Buffer:[Block:20|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
-[PID:5, Block:10, Buffer:None, IO:read, TTL:1]
-[PID:1, Block:10, Buffer:None, IO:read, TTL:1]
-[PID:4, Block:20, Buffer:None, IO:read, TTL:1] 
+ [PID:107, Block:4, Buffer:[Block:4|Data:"None"|Lock:True|DelayWrite:False], IO:read, TTL:1]
+[PID:106, Block:3, Buffer:[Block:3|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
+[PID:105, Block:5, Buffer:[Block:5|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
+[PID:104, Block:4, Buffer:None, IO:write, TTL:1]
+[PID:110, Block:4, Buffer:None, IO:write, TTL:1]
+[PID:109, Block:8, Buffer:[Block:8|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
+[PID:103, Block:3, Buffer:None, IO:write, TTL:1]
+[PID:102, Block:2, Buffer:[Block:2|Data:"None"|Lock:True|DelayWrite:False], IO:write, TTL:1]
+[PID:101, Block:1, Buffer:None, IO:write, TTL:1]
+[PID:108, Block:1, Buffer:None, IO:write, TTL:1] 
 
  Completed Processes: 
   
 ==========================
 
 
-PID[3]: Exiting with success
-PID[1] - getblk: accessing |Block:10|, resulted in "Scenario 1"
-PID [1]: Read [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-PID[5] - getblk: accessing |Block:10|, resulted in "Scenario 5"
-PID[4] - getblk: accessing |Block:20|, resulted in "Scenario 1"
-PID [4]: Read [Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True]
+PID [106]: Write to Buffer -> [Block:3|Data:"None"|Lock:True|DelayWrite:False]
+PID[104] - getblk: accessing |Block:4|, resulted in "Scenario 1"
+PID [104]: Read [Block:4|Data:"None"|Lock:True|DelayWrite:False]
+PID[110] - getblk: accessing |Block:4|, resulted in "Scenario 5"
+PID [105]: Write to Buffer -> [Block:5|Data:"None"|Lock:True|DelayWrite:False]
+PID[107]: Exiting with success
+PID[105]: Exiting with success
+PID [102]: Write to Buffer -> [Block:2|Data:"None"|Lock:True|DelayWrite:False]
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 3"
+PID[101]: asynchronously writing buffer [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:True] to disk
+PID[103] - getblk: accessing |Block:3|, resulted in "Scenario 1"
+PID [103]: Read [Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True]
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 3"
+PID [109]: Write to Buffer -> [Block:8|Data:"None"|Lock:True|DelayWrite:False]
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 3"
+PID[108]: asynchronously writing buffer [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:True] to disk
+PID[101]: asynchronously writing buffer [Block:8|Data:"PID[109] TEXT"|Lock:False|DelayWrite:True] to disk
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 4"
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 4"
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 4"
+[2:"PID[102] TEXT"]DATA WRITTEN!!!!
+[5:"PID[105] TEXT"]DATA WRITTEN!!!!
+[8:"PID[109] TEXT"]DATA WRITTEN!!!!
+PID [104]: Write to Buffer -> [Block:4|Data:"None"|Lock:True|DelayWrite:False]
 
 
 ==========================
  BufferCache Status: 
  All Buffers:
-{1: [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], 2: [Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True], 3: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 4: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 5: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 6: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 7: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 8: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 9: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 10: [Block:None|Data:"None"|Lock:False|DelayWrite:False]}
+[Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True]
+[Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True]
+[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+[Block:8|Data:"PID[109] TEXT"|Lock:False|DelayWrite:False]
+[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Free List:
-[Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True]
-     [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
+[Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True]
+ [Block:8|Data:"PID[109] TEXT"|Lock:False|DelayWrite:False]
+ [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Hash Queue:
-[2] : [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-[0] : [Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True]
+[0] : [Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True]
+ [Block:8|Data:"PID[109] TEXT"|Lock:False|DelayWrite:False]
+ [3] : [Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True]
+ [1] : [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [2] : [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
  
 
  Disk: 
  [1:"None"]
-[2:"None"]
+[2:"PID[102] TEXT"]
 [3:"None"]
 [4:"None"]
-[5:"None"]
+[5:"PID[105] TEXT"]
 [6:"None"]
 [7:"None"]
-[8:"None"]
+[8:"PID[109] TEXT"]
 [9:"None"]
-[10:"None"]
-[11:"None"]
-[12:"None"]
-[13:"None"]
-[14:"None"]
-[15:"None"]
-[16:"None"]
-[17:"None"]
-[18:"None"]
-[19:"None"]
-[20:"None"]
-[21:"None"]
-[22:"None"]
-[23:"None"]
-[24:"None"]
-[25:"None"] 
+[10:"None"] 
 
  Event Bus: 
- [wait:buffer.10]: False
-[wait:buffer.20]: False 
+ [wait:buffer.4]: True
+[wait:buffer.3]: False
+[wait:buffer]: True
+[disk:io.done]: True 
 
  Queued Processes: 
   
 
  Active Processes: 
- [PID:2, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True], IO:write, TTL:0]
-[PID:5, Block:10, Buffer:None, IO:read, TTL:1]
-[PID:1, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], IO:read, TTL:1]
-[PID:4, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:True|DelayWrite:True], IO:read, TTL:1] 
+ [PID:106, Block:3, Buffer:[Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True], IO:write, TTL:0]
+[PID:104, Block:4, Buffer:[Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:110, Block:4, Buffer:None, IO:write, TTL:1]
+[PID:109, Block:8, Buffer:[Block:8|Data:"PID[109] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:103, Block:3, Buffer:[Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True], IO:write, TTL:1]
+[PID:102, Block:2, Buffer:[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:101, Block:1, Buffer:None, IO:write, TTL:1]
+[PID:108, Block:1, Buffer:None, IO:write, TTL:1] 
 
  Completed Processes: 
- [PID:3, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], IO:write, TTL:0] 
+ [PID:107, Block:4, Buffer:[Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True], IO:read, TTL:0]
+[PID:105, Block:5, Buffer:[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0] 
 ==========================
 
 
-PID[5] - getblk: accessing |Block:10|, resulted in "Scenario 1"
-PID [5]: Read [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 3"
+PID[108]: asynchronously writing buffer [Block:4|Data:"PID[104] TEXT"|Lock:False|DelayWrite:True] to disk
+PID[110] - getblk: accessing |Block:4|, resulted in "Scenario 1"
+PID [110]: Read [Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:True]
+PID[108] - getblk: accessing |Block:1|, resulted in "Scenario 2"
+PID [108]: Read [Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False]
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 5"
+PID [103]: Write to Buffer -> [Block:3|Data:"PID[106] TEXT"|Lock:True|DelayWrite:True]
+[4:"PID[104] TEXT"]DATA WRITTEN!!!!
 
 
 ==========================
  BufferCache Status: 
  All Buffers:
-{1: [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], 2: [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], 3: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 4: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 5: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 6: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 7: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 8: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 9: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 10: [Block:None|Data:"None"|Lock:False|DelayWrite:False]}
+[Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False]
+[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+[Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False]
+[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Free List:
-[Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
-     [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-     [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
-     [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
+[Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False]
+ [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Hash Queue:
-[2] : [Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True]
-[0] : [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
+[0] : [Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False]
+ [3] : [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [1] : [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False]
+ [2] : [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
+PID [110]: Write to Buffer -> [Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False]
  
 
  Disk: 
  [1:"None"]
-[2:"None"]
+[2:"PID[102] TEXT"]
 [3:"None"]
-[4:"None"]
-[5:"None"]
+[4:"PID[104] TEXT"]
+[5:"PID[105] TEXT"]
 [6:"None"]
 [7:"None"]
-[8:"None"]
+[8:"PID[109] TEXT"]
 [9:"None"]
-[10:"None"]
-[11:"None"]
-[12:"None"]
-[13:"None"]
-[14:"None"]
-[15:"None"]
-[16:"None"]
-[17:"None"]
-[18:"None"]
-[19:"None"]
-[20:"None"]
-[21:"None"]
-[22:"None"]
-[23:"None"]
-[24:"None"]
-[25:"None"] 
+[10:"None"] 
 
  Event Bus: 
- [wait:buffer.10]: False
-[wait:buffer.20]: True 
+ [wait:buffer.4]: False
+[wait:buffer.3]: True
+[wait:buffer]: True
+[disk:io.done]: True
+[wait:buffer.1]: False 
 
  Queued Processes: 
   
 
  Active Processes: 
- [PID:2, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], IO:write, TTL:0]
-[PID:5, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], IO:read, TTL:1]
-[PID:1, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], IO:read, TTL:0]
-[PID:4, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], IO:read, TTL:0] 
+ [PID:106, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:104, Block:4, Buffer:[Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False], IO:write, TTL:0]
+[PID:110, Block:4, Buffer:[Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False], IO:write, TTL:1]
+[PID:109, Block:8, Buffer:[Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False], IO:write, TTL:0]
+[PID:103, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:102, Block:2, Buffer:[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:101, Block:1, Buffer:None, IO:write, TTL:1]
+[PID:108, Block:1, Buffer:[Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False], IO:write, TTL:1] 
 
  Completed Processes: 
- [PID:3, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:True|DelayWrite:True], IO:write, TTL:0] 
+ [PID:107, Block:4, Buffer:[Block:4|Data:"PID[104] TEXT"|Lock:True|DelayWrite:False], IO:read, TTL:0]
+[PID:105, Block:5, Buffer:[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0] 
 ==========================
 
 
-PID[5]: Exiting with success
-PID[4]: Exiting with success
-
-
- ==============End of all Operations=============== 
-
-
+PID [108]: Write to Buffer -> [Block:1|Data:"PID[109] TEXT"|Lock:True|DelayWrite:False]
+PID[110]: Exiting with success
+PID[103]: Exiting with success
+PID[101] - getblk: accessing |Block:1|, resulted in "Scenario 1"
+PID [101]: Read [Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True]
 
 
 ==========================
  BufferCache Status: 
  All Buffers:
-{1: [Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True], 2: [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], 3: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 4: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 5: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 6: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 7: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 8: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 9: [Block:None|Data:"None"|Lock:False|DelayWrite:False], 10: [Block:None|Data:"None"|Lock:False|DelayWrite:False]}
+[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+[Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True]
+[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Free List:
-[Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True]
-     [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
-     [Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True]
-     [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
-     [Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
-     [Block:None|Data:"None"|Lock:False|DelayWrite:False]
+[Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True]
+ [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
 
 Hash Queue:
-[2] : [Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True]
-[0] : [Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True]
+[0] : [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [3] : [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [1] : [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True]
+ [2] : [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
  
 
  Disk: 
  [1:"None"]
-[2:"None"]
+[2:"PID[102] TEXT"]
 [3:"None"]
-[4:"None"]
-[5:"None"]
+[4:"PID[104] TEXT"]
+[5:"PID[105] TEXT"]
 [6:"None"]
 [7:"None"]
-[8:"None"]
+[8:"PID[109] TEXT"]
 [9:"None"]
-[10:"None"]
-[11:"None"]
-[12:"None"]
-[13:"None"]
-[14:"None"]
-[15:"None"]
-[16:"None"]
-[17:"None"]
-[18:"None"]
-[19:"None"]
-[20:"None"]
-[21:"None"]
-[22:"None"]
-[23:"None"]
-[24:"None"]
-[25:"None"] 
+[10:"None"] 
 
  Event Bus: 
- [wait:buffer.10]: True
-[wait:buffer.20]: True 
+ [wait:buffer.4]: True
+[wait:buffer.3]: True
+[wait:buffer]: True
+[disk:io.done]: True
+[wait:buffer.1]: False 
 
  Queued Processes: 
   
 
  Active Processes: 
- [PID:2, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], IO:write, TTL:0]
-[PID:1, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True], IO:read, TTL:0] 
+ [PID:106, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:104, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:109, Block:8, Buffer:[Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True], IO:write, TTL:0]
+[PID:102, Block:2, Buffer:[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:101, Block:1, Buffer:[Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True], IO:write, TTL:1]
+[PID:108, Block:1, Buffer:[Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True], IO:write, TTL:0] 
 
  Completed Processes: 
- [PID:3, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True], IO:write, TTL:0]
-[PID:5, Block:10, Buffer:[Block:10|Data:"Data written by: PID[3]"|Lock:False|DelayWrite:True], IO:read, TTL:0]
-[PID:4, Block:20, Buffer:[Block:20|Data:"Data written by: PID[2]"|Lock:False|DelayWrite:True], IO:read, TTL:0] 
+ [PID:107, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:read, TTL:0]
+[PID:105, Block:5, Buffer:[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:110, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:103, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0] 
 ==========================
+
+
+PID [101]: Write to Buffer -> [Block:1|Data:"PID[108] TEXT"|Lock:True|DelayWrite:True]
+PID[101]: Exiting with success
+Shutting down Kernel...
+Saving 'delay-write' buffers to disk...
+
+Kernel: Examining the buffer [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True] for "delayed-write"
+[4:"PID[110] TEXT"]DATA WRITTEN!!!!
+Kernel: Examining the buffer [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True] for "delayed-write"
+[3:"PID[103] TEXT"]DATA WRITTEN!!!!
+Kernel: Examining the buffer [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False] for "delayed-write"
+Kernel: Examining the buffer [Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True] for "delayed-write"
+[1:"PID[101] TEXT"]DATA WRITTEN!!!!
+Kernel: Examining the buffer [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False] for "delayed-write"
+
+
+==========================
+ BufferCache Status: 
+ All Buffers:
+[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+[Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True]
+[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
+
+Free List:
+[Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True]
+ [Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True]
+ [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
+
+Hash Queue:
+[0] : [Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True]
+ [3] : [Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True]
+ [1] : [Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False]
+ [Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True]
+ [2] : [Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False]
+ 
+
+ Disk: 
+ [1:"PID[101] TEXT"]
+[2:"PID[102] TEXT"]
+[3:"PID[103] TEXT"]
+[4:"PID[110] TEXT"]
+[5:"PID[105] TEXT"]
+[6:"None"]
+[7:"None"]
+[8:"PID[109] TEXT"]
+[9:"None"]
+[10:"None"] 
+
+ Event Bus: 
+ [wait:buffer.4]: True
+[wait:buffer.3]: True
+[wait:buffer]: True
+[disk:io.done]: True
+[wait:buffer.1]: True 
+
+ Queued Processes: 
+  
+
+ Active Processes: 
+ [PID:106, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:104, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:109, Block:8, Buffer:[Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:102, Block:2, Buffer:[Block:2|Data:"PID[102] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:108, Block:1, Buffer:[Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0] 
+
+ Completed Processes: 
+ [PID:107, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:read, TTL:0]
+[PID:105, Block:5, Buffer:[Block:5|Data:"PID[105] TEXT"|Lock:False|DelayWrite:False], IO:write, TTL:0]
+[PID:110, Block:4, Buffer:[Block:4|Data:"PID[110] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:103, Block:3, Buffer:[Block:3|Data:"PID[103] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0]
+[PID:101, Block:1, Buffer:[Block:1|Data:"PID[101] TEXT"|Lock:False|DelayWrite:True], IO:write, TTL:0] 
+==========================
+
+
+
+
+ ==============Kernel Shutdown=============== 
 
 

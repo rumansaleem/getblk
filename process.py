@@ -4,7 +4,7 @@ class Process (Thread):
     IO_READ = "read"
     IO_WRITE = "write"
     def __init__(self, kernel, pid, blockNumber, io = None, ttl = 1):
-        super(Process, self).__init__()
+        super(Process, self).__init__(daemon=True)
         self.kernel = kernel
         self.buffer = None
         self.pid = pid
@@ -20,7 +20,8 @@ class Process (Thread):
             time.sleep(1)
             self.ttl -= 1
         if self.io == Process.IO_WRITE:
-            self.buffer.modifyData(f'Data written by: PID[{self.pid}]')
+            print(f'PID [{self.pid}]: Write to Buffer -> {self.buffer}')
+            self.buffer.modifyData(f'PID[{self.pid}] TEXT')
         self.kernel.brelse(self.buffer, self.pid)
 
     def __repr__(self):

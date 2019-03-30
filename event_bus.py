@@ -7,10 +7,10 @@ class EventBus:
     def __init__(self):
         self.events = {}
     
-    def sleep(self, eventName):
+    def sleep(self, eventName, createNew = True):
         if eventName in self.events:
             self.events[eventName].wait()
-        else:
+        elif createNew:
             self.events[eventName] = Event()
             self.events[eventName].wait()
 

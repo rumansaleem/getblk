@@ -25,17 +25,24 @@ class Disk:
         self.blockArray = [DiskBlock(i+1) for i in range(self.size)]
         self.eventBus = eventBus
         self.readBuffer = None
+
+    def find(self, blockNumber):
+        for block in self.blockArray:
+            if block.number == blockNumber:
+                return block
     
-    def write(self, blockNumber, data, throttle = 1.8):
-        self.eventBus.sleep(Disk.EVENT_IO_COMPLETE)
+    def write(self, blockNumber, data, throttle = 0.10):
+        self.eventBus.sleep(Disk.EVENT_IO_COMPLETE, False)
         self.eventBus.clear(Disk.EVENT_IO_COMPLETE)
         time.sleep(throttle)
-        writeResult = [ block.write(data) for block in self.blockArray if block.number == blockNumber ]
-        self.eventBus.set(Disk.EVENT_IO_COMPLETE)
-        if len(writeResult) == 0:
-            raise ValueError("blockNumber out of bounds")
+        block = self.find(blockNumber)
+        if block:
+            block.write(data)
+        else: 
+            print(["ERROR: Disk blockNumber out of bounds"])
+        self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
 
-    def writeBuffer(self, buffer, throttle = 1.8):
+    def writeBuffer(self, buffer, throttle = 0.05):
         self.write(buffer.blockNumber, buffer.data, throttle)
         
     def read(self, blockNumber, throttle = 1):
