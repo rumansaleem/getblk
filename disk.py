@@ -11,7 +11,6 @@ class DiskBlock:
     
     def write(self, data):
         self.data = data
-        print(f"{self}DATA WRITTEN!!!!")
  
     def __repr__(self):
         return f'[{self.number}:"{self.data}"]'
@@ -38,9 +37,10 @@ class Disk:
         block = self.find(blockNumber)
         if block:
             block.write(data)
+            self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
         else: 
-            print(["ERROR: Disk blockNumber out of bounds"])
-        self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
+            self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
+            raise ValueError("Disk blockNumber out of bounds")
 
     def writeBuffer(self, buffer, throttle = 0.05):
         self.write(buffer.blockNumber, buffer.data, throttle)
@@ -56,7 +56,7 @@ class Disk:
             self.readBuffer = readData[0]
             return self.readBuffer
         else:
-            raise ValueError("block number out of bounds")
+            raise ValueError("Disk blockNumber out of bounds")
     def __repr__(self):
         return "\n".join([str(blk) for blk in self.blockArray])
     

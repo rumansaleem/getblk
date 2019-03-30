@@ -1,10 +1,12 @@
 from threading import Thread
+from logger import logger
 import time
+
 class Process (Thread):
     IO_READ = "read"
     IO_WRITE = "write"
     def __init__(self, kernel, pid, blockNumber, io = None, ttl = 1):
-        super(Process, self).__init__(daemon=True)
+        super(Process, self).__init__(daemon=True, name=f"PID-{pid}")
         self.kernel = kernel
         self.buffer = None
         self.pid = pid
@@ -13,16 +15,17 @@ class Process (Thread):
         self.ttl = ttl
 
     def run(self):
-        print(f'PID[{self.pid}]: Started')
-        self.buffer = self.kernel.bread(self.blockNumber, self.pid)
+        logger.info(f'Process Started')
+        self.buffer = self.kernel.bread(self.blockNumber)
         while self.ttl > 0:
-            print(f'PID [{self.pid}]: Read {self.buffer}')
-            time.sleep(1)
-            self.ttl -= 1
+            logger.info(f'Reading {self.buffer}')
+            time.sleep(0.5)
+            self.ttl -= 0.5
         if self.io == Process.IO_WRITE:
-            print(f'PID [{self.pid}]: Write to Buffer -> {self.buffer}')
-            self.buffer.modifyData(f'PID[{self.pid}] TEXT')
-        self.kernel.brelse(self.buffer, self.pid)
+            logger.info(f'Write to Buffer -> {self.buffer}')
+            self.buffer.modifyData(f'PID[{self.pid}]')
+        self.kernel.brelse(self.buffer)
+        logger.info('Exiting with success!')
 
     def __repr__(self):
         return f'[PID:{self.pid}, Block:{self.blockNumber}, Buffer:{self.buffer}, IO:{self.io}, TTL:{self.ttl}]'

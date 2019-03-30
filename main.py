@@ -1,8 +1,7 @@
 from process import Process
+from kernel import Kernel
 
-from dummy_kernel import DummyKernel
-
-kernel = DummyKernel(5, 10)
+kernel = Kernel(bufferSize=5, diskSize=10)
 
 kernel.addProcesses([
     Process(kernel, pid = 108, blockNumber = 1, io=Process.IO_WRITE),
