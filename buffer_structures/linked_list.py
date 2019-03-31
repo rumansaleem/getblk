@@ -6,13 +6,15 @@ class LinkedList:
         return iter(self.__items__)
 
     def push(self, item):
-        self.__items__.append(item)
+        if item not in self.__items__:
+            self.__items__.append(item)
 
     def unshift(self,item):
         """
         Inserts element to the beginning of list
         """
-        self.__items__.insert(0, item)
+        if item not in self.__items__:
+            self.__items__.insert(0, item)
 
     def pop(self):
         """
@@ -41,10 +43,8 @@ class LinkedList:
         """
         Removes first element that matches the given matcher
         """
-        index = self.findIndexByBlockNumber(item.blockNumber)
-
-        if index:
-            return self.__items__.pop(index)
+        if item in self.__items__:
+            return self.__items__.remove(item)
 
     def isEmpty(self):
         return  False if len(self.__items__) > 0 else True

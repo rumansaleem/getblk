@@ -93,8 +93,8 @@ class Kernel:
                     logger.info(f'getblk(): accessing |Block:{blockNumber}|, resulted in "Scenario 5"')
                     # logger.info("Scenario 5: Block was found on the hash queue, but its buffer is currently busy.")
                     # sleep until this buffer becomes free
-                    self.eventBus.sleep(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
-                    self.eventBus.clear(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(blockNumber))
+                    self.eventBus.sleep(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(buffer))
+                    self.eventBus.clear(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(buffer))
                     continue
                 
                 # Scenario 1
@@ -118,14 +118,14 @@ class Kernel:
                     if buffer.isDelayedWrite():  
                         logger.info(f'getblk(): accessing |Block:{blockNumber}|, resulted in "Scenario 3"')
                         # write buffer asynchronously to the disk
-                        asyncWriteThread = Thread(None, self.bwrite, "bwrite", (buffer))
-                        asyncWriteThread.start()
+                        self.bwrite(buffer, synchronous=False)
                         continue
                     
                     logger.info(f'getblk(): accessing |Block:{blockNumber}|, resulted in "Scenario 2"')
                     # logger.info("Scenario 2: Buffer not found on hash queue but a buffer from free list is assigned")
                     if buffer.blockNumber:
                         self.bufferCache.hashQueue.remove(buffer)
+                    logger.debug(f'REMOVE BUFFER{buffer} - UPDATED HASH QUEUE:{self.bufferCache.hashQueue}')
                     buffer.lock()
                     buffer.updateBlockNumber(blockNumber)
                     self.bufferCache.hashQueue.add(buffer)
@@ -136,12 +136,11 @@ class Kernel:
         # Todo: wakeup all processes (event: waiting for any buffer to become free;
         self.eventBus.wake(EventBus.EVENT_WAIT_ANY_BUFFER)
         # Todo: wakeup all processes (event: waiting for this buffer to become free;
-        self.eventBus.wake(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(buffer.blockNumber))
+        self.eventBus.wake(EventBus.EVENT_WAIT_SPECIFIC_BUFFER(buffer))
 
         # raise processor execution level to block interrupts;
-        if not buffer.isDelayedWrite():
+        if buffer.isDataValid() and not buffer.isOld():
             # enqueue buffer at end of free list;
-            buffer.delayWrite = False
             self.bufferCache.freeList.push(buffer)
         else:
             # enqueue buffer at beginning of free list;
@@ -154,7 +153,7 @@ class Kernel:
     def bread(self, blockNumber):
         logger.info(f"bread() - Reading [block number {blockNumber}] into buffer from disk")
 
-        buffer  = self.getblk(blockNumber)
+        buffer = self.getblk(blockNumber)
         if buffer.isDataValid():
             return buffer
         # initiate disk read
@@ -162,16 +161,17 @@ class Kernel:
 
         return buffer
 
-    def bwrite(self, buffer):
-        logger.info(f"bwrite() - Asynchronously writing buffer {buffer} to disk")
+    def bwrite(self, buffer, synchronous = False):
         # initiate disk write;
-        self.disk.writeBuffer(buffer)
+        writer = Thread(None, self.disk.writeBuffer, "DISK_IO_WRITE", [buffer])
+        writer.start()
+        logger.info(f"bwrite() - Asynchronously writing buffer {buffer} to disk")
 
-        if not self.eventBus.isSet(Disk.EVENT_IO_COMPLETE): # I/O synchronous
+        if not synchronous: # I/O synchronous
             # sleep (event: I/O complete);
-            self.eventBus.sleep(Disk.EVENT_IO_COMPLETE)
+            writer.join()
             self.brelse(buffer)
         elif buffer.isDelayedWrite():
-            buffer.delayWrite = False
-            self.bufferCache.freeList.unshift(buffer)
+            buffer.setOld(True)
             # mark buffer to put at head of free list;
+            # self.bufferCache.freeList.unshift(buffer)

@@ -17,7 +17,7 @@ class DiskBlock:
 
 
 class Disk:
-    EVENT_IO_COMPLETE = "disk:io.done"
+    # EVENT_IO_COMPLETE = "disk:io.done"
 
     def __init__(self, size, eventBus):
         self.size = size
@@ -31,32 +31,31 @@ class Disk:
                 return block
     
     def write(self, blockNumber, data, throttle = 0.10):
-        self.eventBus.sleep(Disk.EVENT_IO_COMPLETE, False)
-        self.eventBus.clear(Disk.EVENT_IO_COMPLETE)
+        # self.eventBus.sleep(Disk.EVENT_IO_COMPLETE, False)
+        # self.eventBus.clear(Disk.EVENT_IO_COMPLETE)
         time.sleep(throttle)
         block = self.find(blockNumber)
         if block:
             block.write(data)
-            self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
+            # self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
         else: 
-            self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
+            # self.eventBus.wake(Disk.EVENT_IO_COMPLETE)
             raise ValueError("Disk blockNumber out of bounds")
 
     def writeBuffer(self, buffer, throttle = 0.05):
         self.write(buffer.blockNumber, buffer.data, throttle)
+        buffer.delayWrite = False
         
     def read(self, blockNumber, throttle = 1):
-        self.eventBus.sleep(Disk.EVENT_IO_COMPLETE)
-        self.eventBus.clear(Disk.EVENT_IO_COMPLETE)
+        # self.eventBus.sleep(Disk.EVENT_IO_COMPLETE)
+        # self.eventBus.clear(Disk.EVENT_IO_COMPLETE)
         self.readBuffer = None
         time.sleep(throttle)
-        readData = [ block.read() for block in self.blockArray if block.number == blockNumber ]
-        self.eventBus.set(Disk.EVENT_IO_COMPLETE)
-        if len(readData) > 0:
-            self.readBuffer = readData[0]
-            return self.readBuffer
-        else:
-            raise ValueError("Disk blockNumber out of bounds")
+        block = self.find(blockNumber)
+        self.readBuffer = block.read()
+        return self.readBuffer
+        # self.eventBus.set(Disk.EVENT_IO_COMPLETE)
+        
     def __repr__(self):
         return "\n".join([str(blk) for blk in self.blockArray])
     

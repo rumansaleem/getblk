@@ -13,7 +13,14 @@ class Buffer:
         self.locked = False # buffer is locked/busy
         self.delayWrite = False #kernel must write contents to disk before reassigning.
         self.validData = True #data in buffer is valid
+        self.old = False
         # self.processing = False #Kernel is reading/writing context to disk
+
+    def setOld(self, old = True):
+        self.old = old
+
+    def isOld(self):
+        return self.old
 
     def isLocked(self):
         return self.locked
@@ -40,4 +47,4 @@ class Buffer:
         self.delayWrite = True
     
     def __repr__(self):
-        return f'[Block:{self.blockNumber}|Data:"{self.data}"|Lock:{self.isLocked()}|DelayWrite:{self.isDelayedWrite()}]'
+        return f'[BufferID:{self.id}|Block:{self.blockNumber}|Data:"{self.data}"|Lock:{self.isLocked()}|DelayWrite:{self.isDelayedWrite()}|Valid:{self.isDataValid()}]'

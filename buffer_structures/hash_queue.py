@@ -1,4 +1,5 @@
 from .linked_list import LinkedList
+from logger import logger
 
 class HashQueue:
     def __init__(self):
@@ -40,4 +41,4 @@ class HashQueue:
         return self.__hashTable__[hashKey].remove(buffer)
 
     def __repr__(self):
-        return "\n ".join([ "[" + str(key) + "] : " + str(self.__hashTable__[key])  for key in self.__hashTable__])
+        return "\n ".join([ f"[blkno mod {self.size} = {key}]\n{self.__hashTable__[key]}"  for key in self.__hashTable__])

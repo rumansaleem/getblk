@@ -2,7 +2,7 @@ from threading import Event
 
 class EventBus:
     EVENT_WAIT_ANY_BUFFER = "wait:buffer"
-    EVENT_WAIT_SPECIFIC_BUFFER = lambda buf: f"wait:buffer.{buf}"
+    EVENT_WAIT_SPECIFIC_BUFFER = lambda buffer: f"wait:buffer.{buffer.id}"
 
     def __init__(self):
         self.events = {}
