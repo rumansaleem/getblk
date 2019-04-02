@@ -18,7 +18,8 @@ class Worker(Thread):
     
     def run(self):
         while len(self.queued) > 0:
-            process = self.queued.pop()
+        	#pop the first process not the last
+            process = self.queued.pop(0)
             process.start()
             self.started.append(process)
         
