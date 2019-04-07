@@ -2,20 +2,37 @@ from threading import Thread
 from logger import logger
 import time
 
+class IORequest:
+    """
+    Represents a I/O Request.
+    Read/Write request for a specific block number.
+    """
+    READ_IO = "read"
+    WRITE_IO = "write"
+    def __init__(self, blockNumber, io_type):
+        self.blockNumber = blockNumber
+        self.type = io_type
+
+    def isRead(self):
+        return self.type == IORequest.READ_IO
+    
+    def isWrite(self):
+        return self.type == IORequest.WRITE_IO
+
+    def __repr__(self):
+        return f'{self.type.upper()} BLK-{self.blockNumber}'
+
 class Process (Thread):
     """
     Process class
     """
-    IO_READ = "read"
-    IO_WRITE = "write"
-    def __init__(self, kernel, pid, blockNumber, io = None, ttl = 1):
+    def __init__(self, kernel, pid, requests = [], ttl = None):
         super(Process, self).__init__(daemon=True, name=f"PID-{pid}")
         self.kernel = kernel
         self.buffer = None
         self.pid = pid
-        self.blockNumber = blockNumber
-        self.io = Process.IO_READ if io == None else io
-        self.ttl = ttl
+        self.requests = requests
+        self.ttl = None
 
     def run(self):
         """
@@ -23,23 +40,36 @@ class Process (Thread):
         """
         logger.info(f'Process Started')
 
-        # Obtain buffer and perform R/W
-        self.buffer = self.kernel.bread(self.blockNumber)   
+        # satisfy each request
+        for request in self.requests:
+            # Read block
+            if request.isRead():
+                logger.info(f'Read Request <- {request.blockNumber}')
+                self.buffer = self.kernel.bread(request.blockNumber)  
+
+            # Write Block
+            elif request.isWrite():                     
+                logger.info(f'Write Request -> {request.blockNumber}')
+                self.buffer = self.kernel.getblk(request.blockNumber)
+                self.buffer.modifyData(f'PID[{self.pid}]')
+                
+            self.kernel.brelse(self.buffer)                     
         
-        # for simulating process running time
-        while self.ttl > 0:
-            logger.info(f'Reading {self.buffer}')
+            if self.ttl:
+                self.ttl -= 0.5
+            
             time.sleep(0.5)
+
+        # if still time left, work and sleep
+        while self.ttl != None and self.ttl > 0:
+            time.sleep(0.5)
+            logger.info("Working...!")
             self.ttl -= 0.5
 
-        # perform write operation if required
-        if self.io == Process.IO_WRITE:                     
-            logger.info(f'Write to Buffer -> {self.buffer}')
-            self.buffer.modifyData(f'PID[{self.pid}]')
 
         # release buffer afterwards    
-        self.kernel.brelse(self.buffer)                     
         logger.info('Exiting with success!')
 
     def __repr__(self):
-        return f'[PID:{self.pid}, Block:{self.blockNumber}, Buffer:{self.buffer}, IO:{self.io}, TTL:{self.ttl}]'
+        requests = f'[{"".join([str(r) for r in self.requests])}]'
+        return f'[PID:{self.pid}, Requests:{requests}, Buffer:{self.buffer}, TTL:{self.ttl}]'

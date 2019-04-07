@@ -1,18 +1,13 @@
 class Buffer:
     def __init__(self, id):
         self.id = id
-        self.nextInHashQueue = None
-        self.previousInHashQueue = None
-        self.nextInFreeList = None
-        self.previousInFreeList = None
-
         self.blockNumber = None
 
         # status variables
         self.data = None # data contents held in the buffer
         self.locked = False # buffer is locked/busy
-        self.delayWrite = False #kernel must write contents to disk before reassigning.
-        self.validData = True #data in buffer is valid
+        self.delayWrite = False # kernel must write contents to disk before reassigning.
+        self.validData = True # data in buffer is valid
         self.old = False
         # self.processing = False #Kernel is reading/writing context to disk
 
@@ -31,8 +26,13 @@ class Buffer:
     def isDataValid(self):
         return self.validData
 
+    def setValidData(self, data):
+        self.data = data
+        self.validData = True
+
     def updateBlockNumber(self, blockNumber):
         self.blockNumber = blockNumber
+        self.validData = False
 
     def lock(self):
         if not self.isLocked():

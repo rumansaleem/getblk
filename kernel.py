@@ -172,7 +172,8 @@ class Kernel:
         buffer = self.getblk(blockNumber)
         if buffer.isDataValid():
             return buffer
-        # initiate disk read
+            
+        # initiate synchronous disk read
         buffer.setValidData(self.disk.read(buffer.blockNumber))
 
         return buffer
