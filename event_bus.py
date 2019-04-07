@@ -1,5 +1,8 @@
 from threading import Event
 
+"""
+Events are objects that can be accesed by all threads, we use them to control when a process will sleep/wake
+"""
 class EventBus:
     EVENT_WAIT_ANY_BUFFER = "wait:buffer"
     EVENT_WAIT_SPECIFIC_BUFFER = lambda buffer: f"wait:buffer.{buffer.id}"
@@ -8,6 +11,9 @@ class EventBus:
         self.events = {}
     
     def sleep(self, eventName, createNew = True):
+        """
+        Sleeps the process until the 'eventName' happens
+        """
         if eventName in self.events:
             self.events[eventName].wait()
         elif createNew:
@@ -15,6 +21,9 @@ class EventBus:
             self.events[eventName].wait()
 
     def wake(self, eventName):
+        """
+        Wakes the process when the 'eventName' happens
+        """
         if eventName in self.events:
             self.events[eventName].set()
     

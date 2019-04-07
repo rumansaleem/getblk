@@ -1,8 +1,10 @@
 from process import Process
 from kernel import Kernel
 
-kernel = Kernel(bufferSize=1, diskSize=10)
+#initialize kernel
+kernel = Kernel(bufferSize=5, diskSize=10)
 
+#add processes to kernel
 kernel.addProcesses([
     Process(kernel, pid = 108, blockNumber = 1, io=Process.IO_WRITE),
     Process(kernel, pid = 101, blockNumber = 1, io=Process.IO_WRITE), 

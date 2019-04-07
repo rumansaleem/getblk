@@ -1,6 +1,9 @@
 from threading import Thread
 import time
 
+"""
+Disk and DiskBlock classes to emulate disk processes
+"""
 class DiskBlock:
     def __init__(self, number, data = None):
         self.number = number

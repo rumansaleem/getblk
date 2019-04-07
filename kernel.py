@@ -6,6 +6,9 @@ from logger import logger
 import time
 
 class Worker(Thread):
+    """
+    Worker class for starting all processes in the job queue
+    """
     def __init__(self, processes = []):
         super(Worker, self).__init__(daemon=True)
         self.queued = processes
@@ -18,7 +21,7 @@ class Worker(Thread):
     
     def run(self):
         while len(self.queued) > 0:
-        	#pop the first process not the last
+        	#pop from head, not the tail
             process = self.queued.pop(0)
             process.start()
             self.started.append(process)
@@ -27,6 +30,9 @@ class Worker(Thread):
             process.join()
 
 class Kernel:
+    """
+    Kernel class for emulating kernel
+    """
     def __init__(self, bufferSize = 20, diskSize = 100):
         self.bufferCache = BufferCache(bufferSize)
         self.eventBus = EventBus()
@@ -41,6 +47,10 @@ class Kernel:
         [self.worker.add(process) for process in processList]
 
     def snapshot(self):
+        """
+        Function that implements the logger, gives us a view of the 
+        variables and data structures in our program at every step
+        """
         while self.isRunning:
             time.sleep(1.0)
             eventBus = "\n".join([f"[{event}]: {self.eventBus.isSet(event)}" for event in self.eventBus.events])
@@ -65,13 +75,18 @@ class Kernel:
 
     def boot(self):
         self.isRunning = True
+        
+        #Starts snapshotter thread
         snapshotter = Thread(None, self.snapshot, "Snapshotter")
         snapshotter.start()
+
+        #starts processs thread
         self.worker.start()
         self.worker.join()
 
         logger.info("Shutting down Kernel...\nSaving 'delay-write' buffers to disk...\n")
         
+        #After running all processes, writes all changes to the disk
         for buffer in self.bufferCache.__buffers__:
             logger.info(f'Kernel: Examining the buffer {buffer} for "delayed-write"')
             if buffer.isDelayedWrite():
@@ -122,12 +137,12 @@ class Kernel:
                         self.bwrite(buffer, synchronous=False)
                         continue
                     
+                    buffer.lock()
                     logger.info(f'getblk(): accessing |Block:{blockNumber}|, resulted in "Scenario 2"')
                     # logger.info("Scenario 2: Buffer not found on hash queue but a buffer from free list is assigned")
                     if buffer.blockNumber:
                         self.bufferCache.hashQueue.remove(buffer)
                     logger.debug(f'REMOVE BUFFER{buffer} - UPDATED HASH QUEUE:{self.bufferCache.hashQueue}')
-                    buffer.lock()
                     buffer.updateBlockNumber(blockNumber)
                     self.bufferCache.hashQueue.add(buffer)
                     return buffer # block not in hashQ, taken from freelist
@@ -158,7 +173,7 @@ class Kernel:
         if buffer.isDataValid():
             return buffer
         # initiate disk read
-        buffer.data = self.disk.read(buffer.blockNumber)
+        buffer.setValidData(self.disk.read(buffer.blockNumber))
 
         return buffer
 

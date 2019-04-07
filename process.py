@@ -3,6 +3,9 @@ from logger import logger
 import time
 
 class Process (Thread):
+    """
+    Process class
+    """
     IO_READ = "read"
     IO_WRITE = "write"
     def __init__(self, kernel, pid, blockNumber, io = None, ttl = 1):
@@ -15,16 +18,27 @@ class Process (Thread):
         self.ttl = ttl
 
     def run(self):
+        """
+        Function for running process
+        """
         logger.info(f'Process Started')
-        self.buffer = self.kernel.bread(self.blockNumber)
+
+        # Obtain buffer and perform R/W
+        self.buffer = self.kernel.bread(self.blockNumber)   
+        
+        # for simulating process running time
         while self.ttl > 0:
             logger.info(f'Reading {self.buffer}')
             time.sleep(0.5)
             self.ttl -= 0.5
-        if self.io == Process.IO_WRITE:
+
+        # perform write operation if required
+        if self.io == Process.IO_WRITE:                     
             logger.info(f'Write to Buffer -> {self.buffer}')
             self.buffer.modifyData(f'PID[{self.pid}]')
-        self.kernel.brelse(self.buffer)
+
+        # release buffer afterwards    
+        self.kernel.brelse(self.buffer)                     
         logger.info('Exiting with success!')
 
     def __repr__(self):
